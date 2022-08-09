@@ -1,5 +1,4 @@
 const parentTags = [
-  "all",
   "programming",
   "web development",
   "mobile development",

@@ -1,4 +1,5 @@
 import React from "react";
+import { useQueryClient } from "react-query";
 
 import {
   TextField,
@@ -11,7 +12,6 @@ import { Autocomplete } from "@material-ui/lab";
 import CreateIcon from "@material-ui/icons/Create";
 import DescriptionIcon from "@material-ui/icons/Description";
 import LinkIcon from "@material-ui/icons/Link";
-import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 
 import { fetchAPI } from "../../utils/common";
 import DrawerHeader from "../DrawerHeader";
@@ -20,6 +20,7 @@ import useStyles from "./AddEditResource.styles";
 
 const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
   const classes = useStyles();
+  const queryClient = useQueryClient();
   const [loading, setLoading] = React.useState(false);
   const [tag, setTag] = React.useState("");
   const [options, setOptions] = React.useState([]);
@@ -57,6 +58,18 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
 
   const addEditHandler = async (data, action) => {
     setLoading(true);
+    const response = await fetchAPI({
+      url: `/resources/${action}`,
+      method: "POST",
+      body: data,
+    });
+    if (!response?.success) {
+      pushToSnackbar(response?.message, "error");
+    } else {
+      pushToSnackbar(response?.message, "success");
+    }
+    setLoading(false);
+    queryClient.invalidateQueries(["resources"]);
   };
 
   return (
@@ -143,6 +156,7 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (
                 <Chip
+                  color="primary"
                   variant="outlined"
                   label={option}
                   {...getTagProps({ index })}
@@ -156,13 +170,6 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
                 fullWidth
                 required
                 variant="outlined"
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <LocalOfferIcon color="primary" />
-                    </InputAdornment>
-                  ),
-                }}
                 onChange={(e) => setTag(e.target.value)}
               />
             )}

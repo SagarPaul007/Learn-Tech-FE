@@ -2,48 +2,17 @@ import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
   root: {
-    height: "100vh",
-    backgroundColor: theme.palette.background.default,
+    width: 320,
+    margin: theme.spacing(1),
   },
-  flex: {
-    display: "flex",
+  media: {
+    width: 320,
+    height: 180,
   },
-  justifyBetween: {
-    justifyContent: "space-between",
+  link: {
+    marginLeft: "auto",
   },
-  alignCenter: {
-    alignItems: "center",
-  },
-  mt1: {
-    marginTop: theme.spacing(1),
-  },
-  mt2: {
-    marginTop: theme.spacing(2),
-  },
-  mt3: {
-    marginTop: theme.spacing(3),
-  },
-  mr1: {
-    marginRight: theme.spacing(1),
-  },
-  mr2: {
-    marginRight: theme.spacing(2),
-  },
-  placeCenter: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  container: {
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(0, 2),
-    display: "flex",
-  },
-  user: {
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    marginTop: theme.spacing(2),
-    padding: theme.spacing(0, 3),
+  avatar: {
+    backgroundColor: "#3F51B5",
   },
 }));

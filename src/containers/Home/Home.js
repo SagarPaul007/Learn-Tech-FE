@@ -98,7 +98,7 @@ const Home = () => {
     <div className={classes.root}>
       {info && (
         <Alert onClose={() => setInfo(false)} severity="info">
-          Log In to add resources!
+          Sign Up / Log In now to get full access to the application.
         </Alert>
       )}
       <Nav data={userData} />
@@ -125,20 +125,35 @@ const Home = () => {
       <div className={classes.container}>
         <div className={classes.leftContainer}>
           <div className={classes.parentTag}>
+            <Chip
+              label="All"
+              variant={parentTag === "all" ? "default" : "outlined"}
+              color="primary"
+              style={{ textTransform: "capitalize", margin: "5px 10px" }}
+              onClick={() => setParentTag("all")}
+            />
             {parentTags.map((tag) => (
               <Chip
                 key={tag}
                 label={tag}
                 variant={parentTag === tag ? "default" : "outlined"}
                 color="primary"
-                style={{ textTransform: "capitalize", margin: "5px 10px" }}
+                style={{
+                  textTransform: "capitalize",
+                  margin: "5px 0px 0px 5px",
+                }}
                 onClick={() => setParentTag(tag)}
               />
             ))}
           </div>
           <div className={classes.resourcesContainer}>
             {resources.map((resource) => (
-              <Resource key={resource._id} resource={resource} />
+              <Resource
+                key={resource._id}
+                resource={resource}
+                user={userData?.user}
+                pushToSnackbar={pushToSnackbar}
+              />
             ))}
           </div>
           <div ref={lastElementRef} className={classes.lastElement}>
