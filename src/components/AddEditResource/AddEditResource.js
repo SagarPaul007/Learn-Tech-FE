@@ -4,18 +4,19 @@ import { useQueryClient } from "react-query";
 import {
   TextField,
   InputAdornment,
-  MenuItem,
   Button,
   Chip,
+  Drawer,
 } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import CreateIcon from "@material-ui/icons/Create";
 import DescriptionIcon from "@material-ui/icons/Description";
 import LinkIcon from "@material-ui/icons/Link";
+import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 
 import { fetchAPI } from "../../utils/common";
 import DrawerHeader from "../DrawerHeader";
-import parentTags from "../../constants/parentTags";
+import SelectCategories from "../SelectCategories";
 import useStyles from "./AddEditResource.styles";
 
 const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
@@ -24,6 +25,7 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
   const [loading, setLoading] = React.useState(false);
   const [tag, setTag] = React.useState("");
   const [options, setOptions] = React.useState([]);
+  const [open, setOpen] = React.useState(false);
   const [resourceData, setResourceData] = React.useState(
     initialDetails
       ? initialDetails
@@ -31,7 +33,7 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
           title: "",
           description: "",
           url: "",
-          parentTag: "",
+          categories: [],
           tags: [],
         }
   );
@@ -48,6 +50,13 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
     }
     getSuggestions();
   }, [tag]);
+
+  const setCategories = (x) => {
+    setResourceData({
+      ...resourceData,
+      categories: x,
+    });
+  };
 
   const handleChange = (event) => {
     setResourceData({
@@ -129,23 +138,6 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
             }}
             onChange={handleChange}
           />
-          <TextField
-            select
-            fullWidth
-            className={classes.mt2}
-            variant="outlined"
-            label="Category"
-            required
-            name="parentTag"
-            value={resourceData.parentTag}
-            onChange={handleChange}
-          >
-            {parentTags.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </TextField>
           <Autocomplete
             multiple
             freeSolo
@@ -181,6 +173,17 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
             }
           />
           <Button
+            className={classes.mt2}
+            size="large"
+            fullWidth
+            variant="outlined"
+            color="primary"
+            onClick={() => setOpen(!open)}
+            endIcon={<ArrowRightIcon color="primary" />}
+          >
+            {`Select Categories (${resourceData.categories.length})`}
+          </Button>
+          <Button
             fullWidth
             size="large"
             variant="contained"
@@ -193,6 +196,15 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
           </Button>
         </div>
       </div>
+      {open && (
+        <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
+          <SelectCategories
+            data={resourceData.categories}
+            setData={setCategories}
+            close={() => setOpen(false)}
+          />
+        </Drawer>
+      )}
     </>
   );
 };

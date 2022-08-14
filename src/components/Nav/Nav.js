@@ -1,13 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import cx from "classnames";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  IconButton,
-} from "@material-ui/core";
+import { AppBar, Toolbar, Button, IconButton, Link } from "@material-ui/core";
 import PersonIcon from "@material-ui/icons/Person";
 import MenuIcon from "@material-ui/icons/Menu";
 import { logout } from "../../utils/common";
@@ -35,18 +29,30 @@ const Nav = ({ data }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6">Learn Tech</Typography>
+          <Link
+            href="/"
+            variant="h6"
+            underline="none"
+            style={{ color: "white" }}
+          >
+            Learn Tech
+          </Link>
         </div>
         {!data?.success && (
           <div className={cx(classes.flex, classes.alignCenter)}>
             <Button
+              variant="text"
               color="inherit"
               className={classes.mr2}
               onClick={() => navigate("/login")}
             >
               Log In
             </Button>
-            <Button color="inherit" onClick={() => navigate("/signup")}>
+            <Button
+              variant="text"
+              color="inherit"
+              onClick={() => navigate("/signup")}
+            >
               Sign Up
             </Button>
           </div>
@@ -60,7 +66,7 @@ const Nav = ({ data }) => {
             >
               <PersonIcon />
             </IconButton>
-            <Button color="inherit" onClick={() => logout()}>
+            <Button variant="text" color="inherit" onClick={() => logout()}>
               Log Out
             </Button>
           </div>

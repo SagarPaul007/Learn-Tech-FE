@@ -11,15 +11,25 @@ export function useFetchUser() {
   });
 }
 
-export function useFetchResources({ parentTag, selectedTags }) {
+export function useFetchResourcesOfUser() {
+  return useQuery(["userResources"], async () => {
+    const data = await fetchAPI({
+      url: "/users/getResources",
+      method: "GET",
+    });
+    return data;
+  });
+}
+
+export function useFetchResources({ category, selectedTags }) {
   return useInfiniteQuery(
-    ["resources", { parentTag, selectedTags }],
+    ["resources", { category, selectedTags }],
     async ({ pageParam = 1 }) => {
       const resourcesData = await fetchAPI({
         url: `/resources/getResources`,
         method: "POST",
         body: {
-          parentTag,
+          category,
           tags: selectedTags,
           page: pageParam,
         },

@@ -1,4 +1,4 @@
-const parentTags = [
+const categories = [
   "programming",
   "web development",
   "mobile development",
@@ -11,4 +11,4 @@ const parentTags = [
   "other",
 ];
 
-export default parentTags;
+export default categories;

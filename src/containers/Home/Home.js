@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import cx from "classnames";
 
 import { Drawer, Chip, IconButton } from "@material-ui/core";
@@ -9,7 +8,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 
 import AddEditResource from "../../components/AddEditResource";
 import Snackbar from "../../components/Snackbar";
-import parentTags from "../../constants/parentTags";
+import categories from "../../constants/categories";
 import Nav from "../../components/Nav";
 import Resource from "../../components/Resource";
 import { useFetchUser, useFetchResources } from "./Home.hooks";
@@ -18,9 +17,8 @@ import useStyles from "./Home.styles";
 
 const Home = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const lastElementRef = React.useRef(null);
-  const [parentTag, setParentTag] = React.useState("all");
+  const [category, setCategories] = React.useState("programming");
   const [tags, setTags] = React.useState([]);
   const [selectedTags, setSelectedTags] = React.useState([]);
   const [resources, setResources] = React.useState([]);
@@ -39,7 +37,7 @@ const Home = () => {
     isFetching,
     hasNextPage,
     fetchNextPage,
-  } = useFetchResources({ parentTag, selectedTags });
+  } = useFetchResources({ category, selectedTags });
 
   React.useEffect(() => {
     if (userData) {
@@ -69,13 +67,13 @@ const Home = () => {
   React.useEffect(() => {
     async function fetchData() {
       const tagsData = await fetchAPI({
-        url: `/tags/getTags/${parentTag}`,
+        url: `/tags/getTags/${category}`,
         method: "GET",
       });
       setTags(tagsData.tags || []);
     }
     fetchData();
-  }, [parentTag]);
+  }, [category]);
 
   const pushToSnackbar = (message, severity) => {
     setAction({
@@ -86,7 +84,7 @@ const Home = () => {
     });
   };
 
-  if (userLoading || resourcesLoading) {
+  if (userLoading) {
     return (
       <div className={cx(classes.root, classes.placeCenter)}>
         <CircularProgress color="secondary" />
@@ -125,42 +123,36 @@ const Home = () => {
       <div className={classes.container}>
         <div className={classes.leftContainer}>
           <div className={classes.parentTag}>
-            <Chip
-              label="All"
-              variant={parentTag === "all" ? "default" : "outlined"}
-              color="primary"
-              style={{ textTransform: "capitalize", margin: "5px 10px" }}
-              onClick={() => setParentTag("all")}
-            />
-            {parentTags.map((tag) => (
+            {categories.map((e) => (
               <Chip
-                key={tag}
-                label={tag}
-                variant={parentTag === tag ? "default" : "outlined"}
+                key={e}
+                label={e}
+                variant={category === e ? "default" : "outlined"}
                 color="primary"
                 style={{
                   textTransform: "capitalize",
-                  margin: "5px 0px 0px 5px",
+                  margin: "8px 0px 0px 8px",
                 }}
-                onClick={() => setParentTag(tag)}
+                onClick={() => setCategories(e)}
               />
             ))}
           </div>
           <div className={classes.resourcesContainer}>
-            {resources.map((resource) => (
-              <Resource
-                key={resource._id}
-                resource={resource}
-                user={userData?.user}
-                pushToSnackbar={pushToSnackbar}
-              />
-            ))}
+            {!resourcesLoading &&
+              resources.map((resource) => (
+                <Resource
+                  key={resource._id}
+                  resource={resource}
+                  user={userData?.user}
+                  pushToSnackbar={pushToSnackbar}
+                />
+              ))}
           </div>
           <div ref={lastElementRef} className={classes.lastElement}>
             {hasNextPage ? (
               <CircularProgress size={22} />
             ) : (
-              <Typography variant="subtitle2">No more Resources!</Typography>
+              <Typography variant="subtitle2">No more Resources.</Typography>
             )}
           </div>
         </div>
@@ -173,7 +165,7 @@ const Home = () => {
             >
               <FilterListIcon />
             </IconButton>
-            <span>{parentTag}</span>
+            <span>{category}</span>
           </div>
           {tags?.map((tag) => (
             <Chip
