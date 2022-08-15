@@ -11,8 +11,10 @@ import Snackbar from "../../components/Snackbar";
 import categories from "../../constants/categories";
 import Nav from "../../components/Nav";
 import Resource from "../../components/Resource";
-import { useFetchUser, useFetchResources } from "./Home.hooks";
+import Filter from "../../components/Filter";
 import { fetchAPI } from "../../utils/common";
+
+import { useFetchUser, useFetchResources } from "./Home.hooks";
 import useStyles from "./Home.styles";
 
 const Home = () => {
@@ -167,21 +169,25 @@ const Home = () => {
             </IconButton>
             <span>{category}</span>
           </div>
-          {tags?.map((tag) => (
-            <Chip
-              key={tag._id}
-              label={`${tag.name} (${tag.count})`}
-              variant={selectedTags.includes(tag.name) ? "default" : "outlined"}
-              style={{ margin: "5px 10px" }}
-              onClick={() => {
-                if (selectedTags.includes(tag.name)) {
-                  setSelectedTags(selectedTags.filter((t) => t !== tag.name));
-                } else {
-                  setSelectedTags([...selectedTags, tag.name]);
+          <div>
+            {tags?.map((tag) => (
+              <Chip
+                key={tag._id}
+                label={`${tag.name} (${tag.count})`}
+                variant={
+                  selectedTags.includes(tag.name) ? "default" : "outlined"
                 }
-              }}
-            />
-          ))}
+                style={{ margin: "5px" }}
+                onClick={() => {
+                  if (selectedTags.includes(tag.name)) {
+                    setSelectedTags(selectedTags.filter((t) => t !== tag.name));
+                  } else {
+                    setSelectedTags([...selectedTags, tag.name]);
+                  }
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
       {action.type === "add" && (
@@ -192,6 +198,18 @@ const Home = () => {
         >
           <AddEditResource
             action="add"
+            close={() => setAction({ type: "", open: false })}
+            pushToSnackbar={pushToSnackbar}
+          />
+        </Drawer>
+      )}
+      {action.type === "filter" && (
+        <Drawer
+          anchor="right"
+          open={action.open}
+          onClose={() => setAction({ type: "", open: false })}
+        >
+          <Filter
             close={() => setAction({ type: "", open: false })}
             pushToSnackbar={pushToSnackbar}
           />

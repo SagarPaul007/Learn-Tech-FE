@@ -36,7 +36,9 @@ export default makeStyles((theme) => ({
     overflow: "auto",
   },
   rightContainer: {
-    width: 300,
+    minWidth: 300,
+    maxWidth: 300,
+    paddingLeft: theme.spacing(1),
   },
   lastElement: {
     display: "flex",

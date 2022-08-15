@@ -1,4 +1,5 @@
 import React from "react";
+import cx from "classnames";
 import { useQueryClient } from "react-query";
 import millify from "millify";
 import {
@@ -7,16 +8,15 @@ import {
   Tooltip,
   Card,
   CardHeader,
-  CardMedia,
+  Link,
   CardContent,
   CardActions,
   Avatar,
 } from "@material-ui/core";
-import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 import BookmarkIcon from "@material-ui/icons/Bookmark";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import OpenWithIcon from "@material-ui/icons/OpenWith";
 
-import tech from "../../static/tech.jpg";
 import { fetchAPI } from "../../utils/common";
 import { getDate } from "../../utils/dateFormatter";
 import useStyles from "./Resource.styles";
@@ -26,8 +26,8 @@ const Resource = ({ resource, user, pushToSnackbar }) => {
   const queryClient = useQueryClient();
   const { title, description, url, addedBy, createdAt } = resource;
   const modifiedDescription =
-    description.length > 75
-      ? `${description.substring(0, 75)}...`
+    description.length > 180
+      ? `${description.substring(0, 180)}...`
       : description;
 
   const liked = resource.likes?.includes(user?._id);
@@ -79,9 +79,13 @@ const Resource = ({ resource, user, pushToSnackbar }) => {
     <Card className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar}>
-            {resource.addedBy?.name?.charAt(0) || "A"}
-          </Avatar>
+          <Avatar
+            className={classes.avatar}
+            variant="square"
+            alt="resource"
+            src={`https://logo.clearbit.com/${url}`}
+            onClick={() => window.open(url, "_blank")}
+          />
         }
         action={
           <Tooltip title="Bookmark" placement="top">
@@ -94,16 +98,30 @@ const Resource = ({ resource, user, pushToSnackbar }) => {
             </IconButton>
           </Tooltip>
         }
-        title={addedBy?.name || "Anonymous"}
-        subheader={getDate(createdAt)}
+        title={title}
       />
-      <CardMedia className={classes.media} image={tech} title="Technology" />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {title}
+        <Tooltip title="Visit the website" placement="top">
+          <Link
+            variant="body1"
+            underline="none"
+            href={url}
+            target="_blank"
+            rel="noopener"
+            color="primary"
+          >
+            {url}
+          </Link>
+        </Tooltip>
+        <Typography
+          className={cx(classes.mb2, classes.mt2)}
+          variant="body2"
+          component="p"
+        >
+          {modifiedDescription}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
-          {modifiedDescription}
+          {`~ ${addedBy?.name} (${getDate(createdAt)})`}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -126,13 +144,9 @@ const Resource = ({ resource, user, pushToSnackbar }) => {
             {millify(resource.likes?.length || 0)}
           </Typography>
         </>
-        <Tooltip title="Visit the website" placement="top">
-          <IconButton
-            aria-label="Link"
-            className={classes.link}
-            onClick={() => window.open(url, "_blank")}
-          >
-            <OpenInNewIcon />
+        <Tooltip title="View more details" placement="top">
+          <IconButton aria-label="view more" className={classes.link}>
+            <OpenWithIcon />
           </IconButton>
         </Tooltip>
       </CardActions>
