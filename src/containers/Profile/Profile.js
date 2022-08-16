@@ -5,15 +5,18 @@ import {
   Container,
   CircularProgress,
   Typography,
+  Drawer,
 } from "@material-ui/core";
 import { useFetchUser, useFetchResourcesOfUser } from "../Home/Home.hooks";
 import Nav from "../../components/Nav";
 import Resource from "../../components/Resource";
+import Details from "../../components/Details";
 import Snackbar from "../../components/Snackbar";
 import useStyles from "./Profile.styles";
 
 const Profile = () => {
   const classes = useStyles();
+  const [selectedResource, setSelectedResource] = React.useState(null);
   const [action, setAction] = React.useState({
     open: false,
     type: "",
@@ -80,10 +83,25 @@ const Profile = () => {
               resource={resource}
               user={userData?.user}
               pushToSnackbar={pushToSnackbar}
+              setSelected={setSelectedResource}
             />
           ))}
         </div>
       </Container>
+      {selectedResource && (
+        <Drawer
+          anchor="right"
+          open={!!selectedResource}
+          onClose={() => setSelectedResource(null)}
+        >
+          <Details
+            resourceId={selectedResource._id}
+            user={userData?.user}
+            close={() => setSelectedResource(null)}
+            pushToSnackbar={pushToSnackbar}
+          />
+        </Drawer>
+      )}
       {action.type === "snack" && action.open && (
         <Snackbar data={action} setData={setAction} />
       )}

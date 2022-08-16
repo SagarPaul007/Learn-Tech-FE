@@ -20,6 +20,7 @@ export default makeStyles((theme) => ({
   },
   resourcesContainer: {
     marginTop: theme.spacing(2),
+    padding: theme.spacing(2),
     boxShadow: theme.shadows[3],
     display: "flex",
     flexWrap: "wrap",

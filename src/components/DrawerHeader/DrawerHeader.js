@@ -19,7 +19,11 @@ const DrawerHeader = ({ message, close }) => {
       >
         <CloseIcon />
       </IconButton>
-      <Typography style={{ textTransform: "capitalize" }} variant="h6">
+      <Typography
+        style={{ textTransform: "capitalize" }}
+        variant="h6"
+        color="primary"
+      >
         {message}
       </Typography>
     </div>

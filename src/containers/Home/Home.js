@@ -11,6 +11,7 @@ import Snackbar from "../../components/Snackbar";
 import categories from "../../constants/categories";
 import Nav from "../../components/Nav";
 import Resource from "../../components/Resource";
+import Details from "../../components/Details";
 import Filter from "../../components/Filter";
 import { fetchAPI } from "../../utils/common";
 
@@ -21,6 +22,7 @@ const Home = () => {
   const classes = useStyles();
   const lastElementRef = React.useRef(null);
   const [category, setCategories] = React.useState("programming");
+  const [selectedResource, setSelectedResource] = React.useState(null);
   const [tags, setTags] = React.useState([]);
   const [selectedTags, setSelectedTags] = React.useState([]);
   const [resources, setResources] = React.useState([]);
@@ -147,6 +149,7 @@ const Home = () => {
                   resource={resource}
                   user={userData?.user}
                   pushToSnackbar={pushToSnackbar}
+                  setSelected={setSelectedResource}
                 />
               ))}
           </div>
@@ -211,6 +214,20 @@ const Home = () => {
         >
           <Filter
             close={() => setAction({ type: "", open: false })}
+            pushToSnackbar={pushToSnackbar}
+          />
+        </Drawer>
+      )}
+      {selectedResource && (
+        <Drawer
+          anchor="right"
+          open={!!selectedResource}
+          onClose={() => setSelectedResource(null)}
+        >
+          <Details
+            resourceId={selectedResource._id}
+            user={userData?.user}
+            close={() => setSelectedResource(null)}
             pushToSnackbar={pushToSnackbar}
           />
         </Drawer>

@@ -86,6 +86,17 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
       <div className={classes.root}>
         <DrawerHeader message={`${action} Resource`} close={close} />
         <div className={classes.form}>
+          <Button
+            className={classes.mt2}
+            size="large"
+            fullWidth
+            variant="outlined"
+            color="primary"
+            onClick={() => setOpen(!open)}
+            endIcon={<ArrowRightIcon color="primary" />}
+          >
+            {`Select Categories (${resourceData.categories.length})`}
+          </Button>
           <TextField
             variant="outlined"
             fullWidth
@@ -107,6 +118,7 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
             variant="outlined"
             fullWidth
             multiline
+            rows={6}
             label="Description"
             name="description"
             required
@@ -160,7 +172,6 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
                 {...params}
                 label="Tags"
                 fullWidth
-                required
                 variant="outlined"
                 onChange={(e) => setTag(e.target.value)}
               />
@@ -172,17 +183,6 @@ const AddEditResource = ({ initialDetails, close, action, pushToSnackbar }) => {
               })
             }
           />
-          <Button
-            className={classes.mt2}
-            size="large"
-            fullWidth
-            variant="outlined"
-            color="primary"
-            onClick={() => setOpen(!open)}
-            endIcon={<ArrowRightIcon color="primary" />}
-          >
-            {`Select Categories (${resourceData.categories.length})`}
-          </Button>
           <Button
             fullWidth
             size="large"

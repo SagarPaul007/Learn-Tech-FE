@@ -36,6 +36,6 @@ export default makeStyles((theme) => ({
     alignItems: "center",
   },
   form: {
-    margin: theme.spacing(0, 1),
+    margin: theme.spacing(0, 2),
   },
 }));

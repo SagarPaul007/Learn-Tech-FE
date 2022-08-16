@@ -21,7 +21,7 @@ import { fetchAPI } from "../../utils/common";
 import { getDate } from "../../utils/dateFormatter";
 import useStyles from "./Resource.styles";
 
-const Resource = ({ resource, user, pushToSnackbar }) => {
+const Resource = ({ resource, user, pushToSnackbar, setSelected }) => {
   const classes = useStyles();
   const queryClient = useQueryClient();
   const { title, description, url, addedBy, createdAt } = resource;
@@ -145,7 +145,11 @@ const Resource = ({ resource, user, pushToSnackbar }) => {
           </Typography>
         </>
         <Tooltip title="View more details" placement="top">
-          <IconButton aria-label="view more" className={classes.link}>
+          <IconButton
+            aria-label="view more"
+            className={classes.link}
+            onClick={() => setSelected(resource)}
+          >
             <OpenWithIcon />
           </IconButton>
         </Tooltip>
